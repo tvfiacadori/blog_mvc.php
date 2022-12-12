@@ -1,10 +1,21 @@
 <?php
-// controllers/homepage.php
 
-require_once('src/model.php');
+namespace App\Controllers\Homepage;
 
-function homepage() {
-	$posts = getPosts();
+require_once('src/lib/database.php');
+require_once('src/model/post.php');
 
-	require('templates/homepage.php');
+use App\Lib\Database\DatabaseConnection;
+use App\Model\Post\PostRepository;
+
+class Homepage
+{
+    public function execute()
+    {
+        $postRepository = new PostRepository();
+        $postRepository->connection = new DatabaseConnection();
+        $posts = $postRepository->getPosts();
+
+        require('templates/homepage.php');
+    }
 }

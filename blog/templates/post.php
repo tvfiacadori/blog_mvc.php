@@ -1,51 +1,44 @@
-<!DOCTYPE html>
-<html>
+<?php $title = "Le blog de l'AVBN"; ?>
 
-<head>
-  <meta charset="utf-8" />
-  <title>Le blog de l'AVBN</title>
-  <link href="style.css" rel="stylesheet" />
-</head>
+<?php ob_start(); ?>
+<h1>Le super blog de l'AVBN !</h1>
+<p><a href="index.php">Retour à la liste des billets</a></p>
 
-<body>
-  <h1>Le super blog de l'AVBN !</h1>
-  <p><a href="index.php">Retour à la liste des billets</a></p>
-
-  <div class="news">
+<div class="news">
     <h3>
-      <?= htmlspecialchars($post['title']); ?>
-      <em>le <?= $post['french_creation_date']; ?></em>
+        <?= htmlspecialchars($post->title) ?>
+        <em>le <?= $post->frenchCreationDate ?></em>
     </h3>
+
     <p>
-      <?= nl2br(htmlspecialchars($post['content'])); ?>
+        <?= nl2br(htmlspecialchars($post->content)) ?>
     </p>
-  </div>
+</div>
 
-  <h2>Commentaires</h2>
+<h2>Commentaires</h2>
 
-  <form action="index.php?action=addComent&id=<?= $post['identifier'] ?>" method="post">
-    <div>
+<form action="index.php?action=addComment&id=<?= $post->identifier ?>" method="post">
+   <div>
       <label for="author">Auteur</label><br />
       <input type="text" id="author" name="author" />
-    </div>
-    <div>
+   </div>
+   <div>
       <label for="comment">Commentaire</label><br />
-      <textarea name="comment" id="comment"></textarea>
-    </div>
-    <div>
+      <textarea id="comment" name="comment"></textarea>
+   </div>
+   <div>
       <input type="submit" />
-    </div>
+   </div>
+</form>
 
-  </form>
+<?php
+foreach ($comments as $comment) {
+?>
+    <p><strong><?= htmlspecialchars($comment->author) ?></strong> le <?= $comment->frenchCreationDate ?> (<a href="index.php?action=updateComment&id=<?= $comment->identifier ?>">modifier</a>)</p>
+    <p><?= nl2br(htmlspecialchars($comment->comment)) ?></p>
+<?php
+}
+?>
+<?php $content = ob_get_clean(); ?>
 
-  <?php
-  foreach ($comments as $comment) {
-  ?>
-    <p><strong><?= htmlspecialchars($comment['author']) ?></strong> le <?= $comment['french_creation_date'] ?></p>
-    <p><?= nl2br(htmlspecialchars($comment['comment'])) ?></p>
-  <?php
-  }
-  ?>
-</body>
-
-</html>
+<?php require('layout.php') ?>
